@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الاستعلام عن بيانات الطالب</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link href="/WhatsApp Image 2026-09-04 at 10.39.44 PM.jpeg" rel="stylesheet">
+
     <style>
         * {
             box-sizing: border-box;
@@ -12,6 +15,7 @@
             margin: 0;
             padding: 0;
         }
+
         body {
             background-color: #fcfbf9;
             color: #333;
@@ -21,24 +25,37 @@
             min-height: 100vh;
             padding: 20px;
         }
+
         .container {
             width: 100%;
             max-width: 480px;
             text-align: center;
         }
+
         .logo-area {
             margin-bottom: 25px;
         }
+
+        .school-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 12px;
+        }
+
         .school-title {
             color: #8b1528;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
         }
+
         .school-sub {
             color: #8b1528;
-            font-size: 14px;
+            font-size: 15px;
             margin-top: 5px;
+            font-weight: 500;
         }
+
         .page-title {
             color: #8b1528;
             font-size: 24px;
@@ -46,22 +63,26 @@
             margin-top: 25px;
             margin-bottom: 8px;
         }
+
         .page-desc {
             color: #777;
             font-size: 14px;
             margin-bottom: 25px;
         }
+
         .card {
             background: #fdfbf7;
             border: 1px solid #eee4d8;
             border-radius: 18px;
             padding: 25px 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
         }
+
         .form-group {
             text-align: right;
             margin-bottom: 18px;
         }
+
         .form-group label {
             display: block;
             font-size: 15px;
@@ -69,6 +90,7 @@
             margin-bottom: 8px;
             color: #333;
         }
+
         .input-box {
             width: 100%;
             padding: 12px 15px;
@@ -79,6 +101,7 @@
             background-color: #fff;
             text-align: right;
         }
+
         .btn-search {
             width: 100%;
             background-color: #a31c24;
@@ -89,10 +112,13 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
+            transition: 0.3s;
         }
+
         .btn-search:hover {
             background-color: #801218;
         }
+
         .error-msg {
             margin-top: 15px;
             color: #d9534f;
@@ -101,6 +127,7 @@
             padding: 10px;
             border-radius: 8px;
         }
+
         .result-card {
             margin-top: 20px;
             background: #fff;
@@ -109,64 +136,118 @@
             padding: 15px;
             text-align: right;
         }
+
         .result-item {
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
-            border-bottom: 1px stroke #eee;
+            border-bottom: 1px solid #eee;
         }
+
         .result-item:last-child {
             border-bottom: none;
         }
+
         .result-label {
             font-weight: bold;
             color: #555;
         }
+
         .result-value {
             color: #a31c24;
             font-weight: bold;
         }
+
+        @media (max-width: 600px) {
+            .school-logo {
+                width: 80px;
+                height: 80px;
+            }
+
+            .school-title {
+                font-size: 20px;
+            }
+
+            .page-title {
+                font-size: 22px;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="logo-area">
-        <div class="school-title">مدرسة السعادة</div>
-        <div class="school-sub">للتعليم الأساسي</div>
-    </div>
+    <div class="container">
 
-    <h1 class="page-title">الاستعلام عن بيانات الطالب</h1>
-    <p class="page-desc">يرجى إدخال اسم الطالب الثلاثي والقبيلة</p>
+        <div class="logo-area">
 
-    <div class="card">
-        <form method="POST" action="/">
-            <div class="form-group">
-                <label for="student_name">اسم الطالب</label>
-                <input type="text" id="student_name" name="student_name" class="input-box" 
-                       placeholder="مثال: أحمد محمد سالم الحارثي" value="{{ search_query }}" required>
+             }}"
+                 alt="شعار المدرسة"
+                 class="school-logo">
+
+            <div class="school-title">
+                مدرسة أبو تمام
             </div>
-            <button type="submit" class="btn-search">بحث</button>
-        </form>
 
-        {% if error_message %}
-            <div class="error-msg">{{ error_message }}</div>
-        {% endif %}
-    </div>
+            <div class="school-sub">
+                للتعليم الأساسي (9-12)
+            </div>
 
-    {% if student_data %}
-        {% for student in student_data %}
+        </div>
+
+        <h1 class="page-title">الاستعلام عن بيانات الطالب</h1>
+
+        <p class="page-desc">
+            يرجى إدخال اسم الطالب الثلاثي والقبيلة
+        </p>
+
+        <div class="card">
+
+            /
+
+                <div class="form-group">
+                    <label for="student_name">اسم الطالب</label>
+
+                    <input type="text"
+                           id="student_name"
+                           name="student_name"
+                           class="input-box"
+                           placeholder="مثال: محمد ناصر المشرفي"
+                           value="{{ search_query }}"
+                           required>
+                </div>
+
+                <button type="submit" class="btn-search">
+                    بحث
+                </button>
+
+            </form>
+
+            {% if error_message %}
+            <div class="error-msg">
+                {{ error_message }}
+            </div>
+            {% endif %}
+
+        </div>
+
+        {% if student_data %}
+            {% for student in student_data %}
             <div class="result-card">
+
                 {% for key, value in student.items() %}
-                    <div class="result-item">
-                        <span class="result-label">{{ key }}:</span>
-                        <span class="result-value">{{ value }}</span>
-                    </div>
+                <div class="result-item">
+                    <span class="result-label">{{ key }}:</span>
+                    <span class="result-value">{{ value }}</span>
+                </div>
                 {% endfor %}
+
             </div>
-        {% endfor %}
-    {% endif %}
-</div>
+            {% endfor %}
+        {% endif %}
+
+    </div>
 
 </body>
+
 </html>
