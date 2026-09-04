@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import pandas as pd
 import os
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # اسم ملف الإكسل المخزن فيه البيانات
 EXCEL_FILE = 'students.xlsx'
