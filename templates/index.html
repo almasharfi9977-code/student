@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الاستعلام عن بيانات الطالب</title>
 
-    https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap
 
     <style>
         * {
@@ -37,8 +36,9 @@
         }
 
         .school-logo {
-            width: 120px;
-            height: auto;
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
             margin-bottom: 12px;
         }
 
@@ -97,46 +97,49 @@
             border-radius: 10px;
             font-size: 14px;
             outline: none;
+            background-color: #fff;
             text-align: right;
         }
 
         .btn-search {
             width: 100%;
             background-color: #a31c24;
-            color: #fff;
+            color: white;
             border: none;
             padding: 12px;
             border-radius: 10px;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: .3s;
+            transition: 0.3s;
         }
 
         .btn-search:hover {
             background-color: #801218;
         }
 
+        .error-msg {
+            margin-top: 15px;
+            color: #d9534f;
+            font-size: 14px;
+            background: #fdf2f2;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
         .result-card {
             margin-top: 20px;
             background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 15px;
-            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
             text-align: right;
-            box-shadow: 0 2px 8px rgba(0,0,0,.05);
-        }
-
-        .result-card h3 {
-            color: #8b1528;
-            margin-bottom: 15px;
-            text-align: center;
         }
 
         .result-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
 
@@ -154,20 +157,10 @@
             font-weight: bold;
         }
 
-        .error-msg {
-            margin-top: 15px;
-            color: #d9534f;
-            background: #fdf2f2;
-            border: 1px solid #f5c6cb;
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        @media (max-width:600px) {
+        @media (max-width: 600px) {
             .school-logo {
-                width: 90px;
+                width: 80px;
+                height: 80px;
             }
 
             .school-title {
@@ -186,8 +179,7 @@
     <div class="container">
 
         <div class="logo-area">
-
-            https://i.postimg.cc/gk2tjSkn/Whats-App-Image-2026-09-04-at-10-39-44-PM.jpg
+<img src="https://i.postimg.cc/gk2tjSkn/Whats-App-Image-2026-09-04-at-10-39-44-PM.jpg" alt="شعار المدرسة" style="max-width: 120px; height: auto;">
 
             <div class="school-title">
                 مدرسة أبو تمام
@@ -207,7 +199,7 @@
 
         <div class="card">
 
-            <form method="POST">
+            /
 
                 <div class="form-group">
                     <label for="student_name">اسم الطالب</label>
@@ -227,43 +219,27 @@
 
             </form>
 
-        </div>
-
-        <!-- عرض النتائج -->
-
-        {% if student %}
-        <div class="result-card">
-
-            <h3>بيانات الطالب</h3>
-
-            <div class="result-item">
-                <span class="result-label">الاسم:</span>
-                <span class="result-value">{{ student.get('الاسم') }}</span>
+            {% if error_message %}
+            <div class="error-msg">
+                {{ error_message }}
             </div>
-
-            <div class="result-item">
-                <span class="result-label">الصف:</span>
-                <span class="result-value">{{ student.get('الصف') }}</span>
-            </div>
-
-            <div class="result-item">
-                <span class="result-label">الرقم المدني:</span>
-                <span class="result-value">{{ student.get('الرقم المدني') }}</span>
-            </div>
-
-            <div class="result-item">
-                <span class="result-label">النتيجة:</span>
-                <span class="result-value">{{ student.get('النتيجة') }}</span>
-            </div>
+            {% endif %}
 
         </div>
 
-        {% elif error %}
+        {% if student_data %}
+            {% for student in student_data %}
+            <div class="result-card">
 
-        <div class="error-msg">
-            {{ error }}
-        </div>
+                {% for key, value in student.items() %}
+                <div class="result-item">
+                    <span class="result-label">{{ key }}:</span>
+                    <span class="result-value">{{ value }}</span>
+                </div>
+                {% endfor %}
 
+            </div>
+            {% endfor %}
         {% endif %}
 
     </div>
