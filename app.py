@@ -40,5 +40,5 @@ def index():
 
     return render_template('index.html', student_data=student_data, error_message=error_message, search_query=search_query)
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
