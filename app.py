@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-EXCEL_FILE = 'students.xlsx'
+EXCEL_FILE = 'excel.xlsx'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
