@@ -33,4 +33,18 @@ def index():
                         error_message = 'لم يتم العثور على طالب بهذا الاسم.'
 
                 except Exception as e:
-                    error_message
+                    error_message = f'حدث خطأ أثناء قراءة البيانات: {e}'
+            else:
+                error_message = 'ملف students.xlsx غير موجود.'
+        else:
+            error_message = 'يرجى إدخال اسم الطالب.'
+
+    return render_template(
+        'index.html',
+        student_data=student_data,
+        error_message=error_message,
+        search_query=search_query
+    )
+
+if __name__ == '__main__':
+    app.run(debug=True)
