@@ -21,12 +21,17 @@ def index():
                     df = pd.read_excel(EXCEL_FILE)
                     df = df.fillna('—')
 
-                    results = df[
-                        df['اسم الطالب']
-                        .astype(str)
-                        .str.contains(search_query, case=False, na=False)
-                    ]
 
+                    search_words = search_query.strip().split()
+
+results = df[
+    df['اسم الطالب'].astype(str).apply(
+        lambda name: all(word in str(name) for word in search_words)
+    )
+]
+
+
+                    
                     if not results.empty:
                         student_data = results.to_dict(orient='records')
                     else:
