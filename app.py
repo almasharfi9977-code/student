@@ -23,19 +23,23 @@ def index():
 
                     search_words = search_query.strip().split()
 
-                    results = df[
-                        df['اسم الطالب'].astype(str).apply(
-                            lambda name: all(
-                                word.lower() in str(name).lower()
-                                for word in search_words
-                            )
-                        )
-                    ]
-
-                    if not results.empty:
-                        student_data = results.to_dict(orient='records')
+                    # يجب إدخال 3 كلمات على الأقل
+                    if len(search_words) < 3:
+                        error_message = "يرجى كتابة ثلاثة أجزاء من اسم الطالب على الأقل."
                     else:
-                        error_message = 'لم يتم العثور على طالب بهذا الاسم.'
+                        results = df[
+                            df['اسم الطالب'].astype(str).apply(
+                                lambda name: all(
+                                    word.lower() in str(name).lower()
+                                    for word in search_words
+                                )
+                            )
+                        ]
+
+                        if not results.empty:
+                            student_data = results.to_dict(orient='records')
+                        else:
+                            error_message = 'لم يتم العثور على طالب بهذا الاسم.'
 
                 except Exception as e:
                     error_message = f'حدث خطأ أثناء قراءة البيانات: {e}'
