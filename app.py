@@ -17,19 +17,21 @@ def index():
 
         if search_query:
             if os.path.exists(EXCEL_FILE):
-                
-                                    try:
+                try:
                     df = pd.read_excel(EXCEL_FILE)
                     df = df.fillna('—')
+
                     search_words = search_query.strip().split()
-      results = df[
-    df['اسم الطالب'].astype(str).apply(
-        lambda name: all(word in str(name) for word in search_words)
-    )
-]
 
+                    results = df[
+                        df['اسم الطالب'].astype(str).apply(
+                            lambda name: all(
+                                word.lower() in str(name).lower()
+                                for word in search_words
+                            )
+                        )
+                    ]
 
-                    
                     if not results.empty:
                         student_data = results.to_dict(orient='records')
                     else:
@@ -37,8 +39,10 @@ def index():
 
                 except Exception as e:
                     error_message = f'حدث خطأ أثناء قراءة البيانات: {e}'
+
             else:
-                error_message = 'ملف students.xlsx غير موجود.'
+                error_message = 'ملف excel.xlsx غير موجود.'
+
         else:
             error_message = 'يرجى إدخال اسم الطالب.'
 
