@@ -17,14 +17,12 @@ def index():
 
         if search_query:
             if os.path.exists(EXCEL_FILE):
-                try:
+                
+                                    try:
                     df = pd.read_excel(EXCEL_FILE)
                     df = df.fillna('—')
-
-
                     search_words = search_query.strip().split()
-
-results = df[
+      results = df[
     df['اسم الطالب'].astype(str).apply(
         lambda name: all(word in str(name) for word in search_words)
     )
