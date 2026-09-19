@@ -3,11 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>الاستعلام عن بيانات الطالب</title>
 
@@ -37,37 +33,39 @@
             text-align: center;
         }
 
-        /* منطقة الشعار */
+        /* الشعار واسم المدرسة */
 
         .logo-area {
             margin-bottom: 25px;
         }
 
         .school-logo {
+            display: block;
             width: 120px;
             height: 120px;
             object-fit: contain;
-            margin-bottom: 12px;
+            margin: 0 auto 12px;
+            border-radius: 8px;
         }
 
         .school-title {
             color: #8b1528;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 700;
         }
 
         .school-sub {
             color: #8b1528;
-            font-size: 15px;
+            font-size: 16px;
             margin-top: 5px;
             font-weight: 500;
         }
 
         .page-title {
             color: #8b1528;
-            font-size: 24px;
+            font-size: 27px;
             font-weight: 700;
-            margin-top: 25px;
+            margin-top: 28px;
             margin-bottom: 8px;
         }
 
@@ -81,27 +79,27 @@
         /* البطاقات */
 
         .card {
-            background: #fdfbf7;
+            background-color: #fdfbf7;
             border: 1px solid #eee4d8;
             border-radius: 18px;
             padding: 25px 20px;
-            margin-bottom: 22px;
+            margin-bottom: 24px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
         }
 
         .section-title {
             color: #8b1528;
-            font-size: 20px;
+            font-size: 21px;
             font-weight: 700;
             margin-bottom: 18px;
         }
 
         .section-description {
             color: #777777;
-            font-size: 13px;
+            font-size: 14px;
             margin-top: -8px;
-            margin-bottom: 18px;
-            line-height: 1.7;
+            margin-bottom: 20px;
+            line-height: 1.8;
         }
 
         /* نموذج البحث */
@@ -113,10 +111,10 @@
 
         .form-group label {
             display: block;
+            color: #333333;
             font-size: 15px;
             font-weight: 700;
             margin-bottom: 8px;
-            color: #333333;
         }
 
         .input-box {
@@ -124,10 +122,11 @@
             padding: 13px 15px;
             border: 1.5px solid #d88d28;
             border-radius: 10px;
-            font-size: 15px;
-            outline: none;
             background-color: #ffffff;
+            color: #333333;
+            font-size: 15px;
             text-align: right;
+            outline: none;
             transition: 0.2s;
         }
 
@@ -138,11 +137,11 @@
 
         .btn-search {
             width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
             background-color: #a31c24;
             color: #ffffff;
-            border: none;
-            padding: 13px;
-            border-radius: 10px;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
@@ -157,30 +156,34 @@
 
         .error-msg {
             margin-top: 15px;
+            padding: 12px;
+            border: 1px solid #f0cccc;
+            border-radius: 8px;
+            background-color: #fdf2f2;
             color: #b52b27;
             font-size: 14px;
-            background: #fdf2f2;
-            border: 1px solid #f0cccc;
-            padding: 12px;
-            border-radius: 8px;
             line-height: 1.7;
         }
 
-        /* بطاقات نتائج البحث */
+        /* نتائج البحث */
+
+        .results-section {
+            margin-bottom: 24px;
+        }
 
         .results-title {
             color: #8b1528;
-            font-size: 20px;
+            font-size: 21px;
             font-weight: 700;
-            margin: 25px 0 12px;
+            margin-bottom: 12px;
         }
 
         .result-card {
             margin-top: 15px;
-            background: #ffffff;
+            padding: 15px;
             border: 1px solid #e0e0e0;
             border-radius: 12px;
-            padding: 15px;
+            background-color: #ffffff;
             text-align: right;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.02);
         }
@@ -199,8 +202,8 @@
         }
 
         .result-label {
-            font-weight: bold;
             color: #555555;
+            font-weight: bold;
             flex-shrink: 0;
         }
 
@@ -208,10 +211,10 @@
             color: #a31c24;
             font-weight: bold;
             text-align: left;
-            word-break: break-word;
+            overflow-wrap: anywhere;
         }
 
-        /* قوائم الصفوف */
+        /* أزرار الصفوف */
 
         .classes-grid {
             display: grid;
@@ -225,25 +228,22 @@
         .class-button {
             display: block;
             padding: 14px 8px;
-            color: #a31c24;
-            background-color: #ffffff;
             border: 2px solid #a31c24;
             border-radius: 11px;
-            text-decoration: none;
+            background-color: #ffffff;
+            color: #a31c24;
             font-size: 16px;
             font-weight: 700;
+            text-align: center;
+            text-decoration: none;
             transition: 0.25s;
         }
 
-        .class-button:hover {
-            color: #ffffff;
-            background-color: #a31c24;
-            transform: translateY(-2px);
-        }
-
+        .class-button:hover,
         .class-button.active {
-            color: #ffffff;
             background-color: #a31c24;
+            color: #ffffff;
+            transform: translateY(-2px);
         }
 
         .empty-message {
@@ -252,7 +252,7 @@
             line-height: 1.8;
         }
 
-        /* عنوان قائمة الصف */
+        /* رأس قائمة الطلاب */
 
         .class-list-header {
             display: flex;
@@ -269,10 +269,10 @@
 
         .students-count {
             display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
             background-color: #a31c24;
             color: #ffffff;
-            padding: 8px 13px;
-            border-radius: 20px;
             font-size: 13px;
             font-weight: bold;
             white-space: nowrap;
@@ -297,37 +297,27 @@
         .students-table td {
             padding: 12px;
             border: 1px solid #e1e1e1;
-            text-align: right;
             font-size: 14px;
+            text-align: right;
         }
 
         .students-table th {
-            color: #ffffff;
             background-color: #a31c24;
+            color: #ffffff;
             font-weight: bold;
         }
 
-        .students-table tr:nth-child(even) {
+        .students-table tbody tr:nth-child(even) {
             background-color: #faf6f3;
         }
 
-        .students-table tr:hover {
+        .students-table tbody tr:hover {
             background-color: #fff1e5;
         }
 
         .student-number {
             width: 60px;
             text-align: center !important;
-        }
-
-        .student-name-link {
-            color: #a31c24;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .student-name-link:hover {
-            text-decoration: underline;
         }
 
         .back-link {
@@ -356,7 +346,7 @@
             }
 
             .school-title {
-                font-size: 20px;
+                font-size: 21px;
             }
 
             .page-title {
@@ -398,7 +388,7 @@
 
     <main class="container">
 
-        <!-- شعار واسم المدرسة -->
+        <!-- الشعار واسم المدرسة -->
 
         <header class="logo-area">
 
@@ -422,7 +412,7 @@
 
         </header>
 
-        <!-- قسم البحث -->
+        <!-- نموذج البحث -->
 
         <section class="card">
 
@@ -474,180 +464,38 @@
 
         {% if student_data %}
 
-            <h2 class="results-title">
-                نتائج البحث
-            </h2>
+            <section class="results-section">
 
-            {% for student in student_data %}
+                <h2 class="results-title">
+                    نتائج البحث
+                </h2>
 
-                <article class="result-card">
+                {% for student in student_data %}
 
-                    {% for key, value in student.items() %}
+                    <article class="result-card">
 
-                        {% if not key.startswith('_')
-                              and value|string != 'nan'
-                              and value|string != 'None'
-                              and value|string != '' %}
+                        {% for key, value in student.items() %}
 
-                            <div class="result-item">
+                            {% if not key.startswith('_')
+                                and value|string != 'nan'
+                                and value|string != 'None'
+                                and value|string != ''
+                            %}
 
-                                <span class="result-label">
-                                    {{ key }}:
-                                </span>
+                                <div class="result-item">
 
-                                <span class="result-value">
-                                    {{ value }}
-                                </span>
+                                    <span class="result-label">
+                                        {{ key }}:
+                                    </span>
 
-                            </div>
+                                    <span class="result-value">
+                                        {{ value }}
+                                    </span>
 
-                        {% endif %}
+                                </div>
 
-                    {% endfor %}
+                            {% endif %}
 
-                </article>
+                        {% endfor %}
 
-            {% endfor %}
-
-        {% endif %}
-
-        <!-- قوائم الصفوف -->
-
-        <section
-            class="card"
-            id="classes-section"
-        >
-
-            <h2 class="section-title">
-                قوائم الطلاب حسب الصف
-            </h2>
-
-            <p class="section-description">
-                اضغط على الصف المطلوب لعرض قائمة جميع الطلاب المسجلين فيه
-            </p>
-
-            {% if classes %}
-
-                <div class="classes-grid">
-
-                    {% for class_name in classes %}
-
-                         }}#students-list"
-                            class="class-button {% if selected_class|string == class_name|string %}active{% endif %}"
-                        >
-                            الصف {{ class_name }}
-                        </a>
-
-                    {% endfor %}
-
-                </div>
-
-            {% else %}
-
-                <p class="empty-message">
-                    لا توجد صفوف مسجلة في ملف Excel.
-                </p>
-
-            {% endif %}
-
-        </section>
-
-        <!-- قائمة طلاب الصف المختار -->
-
-        {% if selected_class %}
-
-            <section
-                class="card"
-                id="students-list"
-            >
-
-                <div class="class-list-header">
-
-                    <h2 class="section-title">
-                        قائمة طلاب الصف {{ selected_class }}
-                    </h2>
-
-                    <span class="students-count">
-                        عدد الطلاب:
-                        {{ class_students | length }}
-                    </span>
-
-                </div>
-
-                {% if class_students %}
-
-                    <div class="table-wrapper">
-
-                        <table class="students-table">
-
-                            <thead>
-                                <tr>
-                                    <th class="student-number">
-                                        م
-                                    </th>
-
-                                    <th>
-                                        اسم الطالب
-                                    </th>
-
-                                    <th>
-                                        الصف
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                {% for student in class_students %}
-
-                                    <tr>
-
-                                        <td class="student-number">
-                                            {{ loop.index }}
-                                        </td>
-
-                                        <td>
-                                             }}"
-                                                title="اسم الطالب"
-                                            >
-                                                {{ student[name_column] }}
-                                            </a>
-                                        </td>
-
-                                        <td>
-                                            {{ student[class_column] }}
-                                        </td>
-
-                                    </tr>
-
-                                {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                {% else %}
-
-                    <p class="empty-message">
-                        لا توجد أسماء طلاب مسجلة في هذا الصف.
-                    </p>
-
-                {% endif %}
-
-                 }}#classes-section"
-                    class="back-link"
-                >
-                    العودة إلى جميع الصفوف
-                </a>
-
-            </section>
-
-        {% endif %}
-
-    </main>
-
-</body>
-
-</html>
+       
