@@ -1,249 +1,157 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الاستعلام عن بيانات الطالب</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الاستعلام عن بيانات الطالب</title>
 
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Tahoma",sans-serif;
+}
 
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+body{
+    background:#f5f5f5;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
 
-        body {
-            background-color: #fcfbf9;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+.container{
+    width:90%;
+    max-width:700px;
+    text-align:center;
+}
+.logo{
+    width:140px;
+    height:auto;
+    display:block;
+    margin:0 auto 15px auto;
+}
+}
 
-        .container {
-            width: 100%;
-            max-width: 480px;
-            text-align: center;
-        }
+.school-name{
+    color:#8c1d1d;
+    font-size:34px;
+    font-weight:bold;
+    margin-bottom:5px;
+}
 
-        .logo-area {
-            margin-bottom: 25px;
-        }
+.school-sub{
+    color:#8c1d1d;
+    font-size:24px;
+    margin-bottom:45px;
+}
 
-        .school-logo {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            margin-bottom: 12px;
-        }
+.title{
+    color:#8c1d1d;
+    font-size:40px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
 
-        .school-title {
-            color: #8b1528;
-            font-size: 24px;
-            font-weight: 700;
-        }
+.subtitle{
+    color:#666;
+    font-size:20px;
+    margin-bottom:35px;
+}
 
-        .school-sub {
-            color: #8b1528;
-            font-size: 15px;
-            margin-top: 5px;
-            font-weight: 500;
-        }
+.form-box{
+    background:#faf7f4;
+    border:1px solid #e3d8d0;
+    border-radius:25px;
+    padding:35px;
+    text-align:right;
+    box-shadow:0 3px 10px rgba(0,0,0,.05);
+}
 
-        .page-title {
-            color: #8b1528;
-            font-size: 24px;
-            font-weight: 700;
-            margin-top: 25px;
-            margin-bottom: 8px;
-        }
+.label-top{
+    font-size:22px;
+    text-align:center;
+    margin-bottom:20px;
+}
 
-        .page-desc {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
+.form-group{
+    margin-bottom:25px;
+}
 
-        .card {
-            background: #fdfbf7;
-            border: 1px solid #eee4d8;
-            border-radius: 18px;
-            padding: 25px 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-        }
+label{
+    display:block;
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:12px;
+    color:#222;
+}
 
-        .form-group {
-            text-align: right;
-            margin-bottom: 18px;
-        }
+input{
+    width:100%;
+    padding:18px;
+    border:2px solid #d88f26;
+    border-radius:15px;
+    background:#eaf0fb;
+    font-size:22px;
+    text-align:right;
+}
 
-        .form-group label {
-            display: block;
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #333;
-        }
+button{
+    width:100%;
+    padding:18px;
+    border:none;
+    border-radius:15px;
+    background:#ab1720;
+    color:white;
+    font-size:26px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
 
-        .input-box {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1.5px solid #d88d28;
-            border-radius: 10px;
-            font-size: 14px;
-            outline: none;
-            background-color: #fff;
-            text-align: right;
-        }
-
-        .btn-search {
-            width: 100%;
-            background-color: #a31c24;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-search:hover {
-            background-color: #801218;
-        }
-
-        .error-msg {
-            margin-top: 15px;
-            color: #d9534f;
-            font-size: 14px;
-            background: #fdf2f2;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        .result-card {
-            margin-top: 20px;
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: right;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .result-item:last-child {
-            border-bottom: none;
-        }
-
-        .result-label {
-            font-weight: bold;
-            color: #555;
-        }
-
-        .result-value {
-            color: #a31c24;
-            font-weight: bold;
-        }
-
-        @media (max-width: 600px) {
-            .school-logo {
-                width: 80px;
-                height: 80px;
-            }
-
-            .school-title {
-                font-size: 20px;
-            }
-
-            .page-title {
-                font-size: 22px;
-            }
-        }
-    </style>
+button:hover{
+    background:#8c1118;
+}
+</style>
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <div class="logo-area">
-<img src="https://i.postimg.cc/gk2tjSkn/Whats-App-Image-2026-09-04-at-10-39-44-PM.jpg" alt="شعار المدرسة" style="max-width: 120px; height: auto;">
+    <!-- الشعار -->
+   <img src="{{ url_for('static', filename='logo.jpg') }}"
 
-            <div class="school-title">
-                مدرسة أبو تمام
-            </div>
+    <!-- اسم المدرسة -->
+    <div class="school-name">مدرسة أبو تمام</div>
+    <div class="school-sub">للتعليم الأساسي (9-12)</div>
 
-            <div class="school-sub">
-                للتعليم الأساسي (9-12)
-            </div>
+    <!-- العنوان -->
+    <div class="title">الاستعلام عن بيانات الطالب</div>
 
+    <div class="subtitle">
+        يرجى إدخال اسم الطالب الثلاثي والولاية
+    </div>
+
+    <!-- نموذج البحث -->
+    <div class="form-box">
+
+        <div class="label-top">/</div>
+
+        <div class="form-group">
+            <label>اسم الطالب</label>
+            <input type="text"
+                   placeholder="أحمد بن هلال بن حمد سلطان المجلي">
         </div>
 
-        <h1 class="page-title">الاستعلام عن بيانات الطالب</h1>
-
-        <p class="page-desc">
-            يرجى إدخال اسم الطالب الثلاثي والقبيلة
-        </p>
-
-        <div class="card">
-
-            /
-
-                <div class="form-group">
-                    <label for="student_name">اسم الطالب</label>
-
-                    <input type="text"
-                           id="student_name"
-                           name="student_name"
-                           class="input-box"
-                           placeholder="مثال: محمد ناصر المشرفي"
-                           value="{{ search_query }}"
-                           required>
-                </div>
-
-                <button type="submit" class="btn-search">
-                    بحث
-                </button>
-
-            </form>
-
-            {% if error_message %}
-            <div class="error-msg">
-                {{ error_message }}
-            </div>
-            {% endif %}
-
-        </div>
-
-        {% if student_data %}
-            {% for student in student_data %}
-            <div class="result-card">
-
-                {% for key, value in student.items() %}
-                <div class="result-item">
-                    <span class="result-label">{{ key }}:</span>
-                    <span class="result-value">{{ value }}</span>
-                </div>
-                {% endfor %}
-
-            </div>
-            {% endfor %}
-        {% endif %}
+        <button type="submit">
+            بحث
+        </button>
 
     </div>
 
-</body>
+</div>
 
+</body>
 </html>
