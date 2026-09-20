@@ -6,23 +6,27 @@ from openpyxl import load_workbook
 
 app = Flask(__name__)
 
-# تحديد مكان المشروع الحالي
+# مسار مجلد المشروع
 BASE_DIR = Path(__file__).resolve().parent
 
-# ملف قاعدة بيانات الطلاب
+# يجب أن يكون ملف Excel بجانب app.py
 EXCEL_FILE = BASE_DIR / "excel.xlsx"
 
 
 def normalize_text(value):
-    """
-    توحيد النص العربي لتسهيل البحث.
-    يعالج بعض الاختلافات بين الحروف العربية.
-    """
+    """توحيد النص العربي لتسهيل البحث."""
     if value is None:
         return ""
 
     text = str(value).strip().lower()
 
+    # إزالة الحركات والتنوين والتطويل
+    arabic_marks = "ًٌٍَُِّْـ"
+
+    for mark in arabic_marks:
+        text = text.replace(mark, "")
+
+    # توحيد بعض الحروف العربية
     replacements = {
         "أ": "ا",
         "إ": "ا",
@@ -31,69 +35,76 @@ def normalize_text(value):
         "ى": "ي",
         "ؤ": "و",
         "ئ": "ي",
-        "ـ": "",
     }
 
     for old_character, new_character in replacements.items():
         text = text.replace(old_character, new_character)
 
-    # إزالة المسافات الزائدة
+    # توحيد المسافات
     return " ".join(text.split())
 
 
 def read_students():
     """
-    قراءة بيانات الطلاب من ملف Excel.
+    قراءة الطلاب من ملف Excel.
 
-    الصف الأول في ملف Excel يجب أن يحتوي على أسماء الأعمدة،
-    مثل:
+    يجب أن يكون الصف الأول عناوين الأعمدة، مثل:
     اسم الطالب | الصف | الولاية
     """
 
     if not EXCEL_FILE.exists():
         raise FileNotFoundError(
             "لم يتم العثور على ملف excel.xlsx. "
-            "تأكد من وضعه في نفس مجلد app.py"
+            "تأكد من وضعه في نفس مجلد app.py."
         )
 
-    # data_only=True لقراءة القيم بدلًا من معادلات Excel
-    workbook = load_workbook(EXCEL_FILE, data_only=True)
+    try:
+        workbook = load_workbook(
+            EXCEL_FILE,
+            data_only=True
+        )
+    except Exception as exception:
+        raise RuntimeError(
+            f"تعذر فتح ملف Excel: {exception}"
+        ) from exception
 
     # استخدام أول ورقة في ملف Excel
-    sheet = workbook.active
+    worksheet = workbook.active
 
     # قراءة جميع الصفوف
-    rows = list(sheet.iter_rows(values_only=True))
+    rows = list(
+        worksheet.iter_rows(values_only=True)
+    )
 
     if not rows:
         return []
 
-    # الصف الأول هو عناوين الأعمدة
+    # قراءة عناوين الأعمدة من الصف الأول
     headers = []
 
-    for index, value in enumerate(rows[0]):
+    for index, value in enumerate(rows[0], start=1):
         if value is None or str(value).strip() == "":
-            headers.append(f"البيان {index + 1}")
+            headers.append(f"البيان {index}")
         else:
             headers.append(str(value).strip())
 
     students = []
 
-    # بداية قراءة بيانات الطلاب من الصف الثاني
+    # بيانات الطلاب تبدأ من الصف الثاني
     for excel_row_number, row in enumerate(rows[1:], start=2):
 
-        # تجاهل الصفوف الفارغة
+        # تجاهل الصفوف الفارغة بالكامل
         if not any(
-            value is not None and str(value).strip()
+            value is not None and str(value).strip() != ""
             for value in row
         ):
             continue
 
         student_data = {}
 
-        for index, header in enumerate(headers):
-            if index < len(row):
-                value = row[index]
+        for column_index, header in enumerate(headers):
+            if column_index < len(row):
+                value = row[column_index]
             else:
                 value = ""
 
@@ -112,48 +123,41 @@ def read_students():
     return students
 
 
-def find_name_column(student_data):
+def search_students(search_text):
     """
-    تحديد العمود الذي يحتوي على اسم الطالب.
+    البحث في جميع خلايا صف الطالب داخل ملف Excel.
 
-    يقبل أسماء أعمدة مثل:
-    اسم الطالب
-    الاسم
-    اسم
-    name
-    student name
+    يمكن البحث بالاسم أو جزء من الاسم أو الصف أو الولاية.
     """
 
-    possible_name_columns = [
-        "اسم الطالب",
-        "الاسم",
-        "اسم",
-        "name",
-        "student name",
-    ]
+    normalized_search = normalize_text(search_text)
 
-    normalized_possible_names = [
-        normalize_text(name)
-        for name in possible_name_columns
-    ]
+    if not normalized_search:
+        return []
 
-    for column_name in student_data.keys():
-        normalized_column_name = normalize_text(column_name)
+    matched_students = []
 
-        if normalized_column_name in normalized_possible_names:
-            return column_name
+    students = read_students()
 
-    # إذا لم يتم العثور على عمود معروف، يستخدم أول عمود
-    if student_data:
-        return next(iter(student_data.keys()))
+    for student in students:
+        student_data = student["data"]
 
-    return None
+        # جمع جميع خلايا الصف في نص واحد
+        searchable_text = " ".join(
+            normalize_text(value)
+            for value in student_data.values()
+            if value is not None
+        )
+
+        # البحث بجزء من النص
+        if normalized_search in searchable_text:
+            matched_students.append(student)
+
+    return matched_students
 
 
 def get_student_by_id(student_id):
-    """
-    الحصول على طالب محدد باستخدام رقم صفه في Excel.
-    """
+    """الحصول على طالب حسب رقم الصف في ملف Excel."""
 
     students = read_students()
 
@@ -166,9 +170,7 @@ def get_student_by_id(student_id):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    """
-    الصفحة الرئيسية والبحث عن الطلاب.
-    """
+    """الصفحة الرئيسية والبحث عن الطلاب."""
 
     results = []
     searched_name = ""
@@ -186,28 +188,7 @@ def index():
 
         else:
             try:
-                students = read_students()
-
-                # النص الذي أدخله المستخدم بعد التوحيد
-                search_value = normalize_text(searched_name)
-
-                for student in students:
-
-                    student_data = student["data"]
-
-                    name_column = find_name_column(student_data)
-
-                    if name_column:
-                        student_name = student_data.get(
-                            name_column,
-                            ""
-                        )
-                    else:
-                        student_name = ""
-
-                    # البحث بجزء من الاسم
-                    if search_value in normalize_text(student_name):
-                        results.append(student)
+                results = search_students(searched_name)
 
                 if not results:
                     error = "لم يتم العثور على طالب بهذا الاسم."
@@ -215,9 +196,12 @@ def index():
             except FileNotFoundError as exception:
                 error = str(exception)
 
+            except RuntimeError as exception:
+                error = str(exception)
+
             except Exception as exception:
                 error = (
-                    "حدث خطأ أثناء قراءة ملف Excel: "
+                    "حدث خطأ أثناء البحث في ملف Excel: "
                     f"{exception}"
                 )
 
@@ -231,22 +215,16 @@ def index():
 
 @app.route("/student/<int:student_id>")
 def student_details(student_id):
-    """
-    صفحة عرض جميع تفاصيل الطالب.
-    """
+    """عرض جميع تفاصيل طالب محدد."""
 
     try:
         student = get_student_by_id(student_id)
-
-    except FileNotFoundError as exception:
-        abort(404, description=str(exception))
 
     except Exception as exception:
         abort(
             404,
             description=(
-                "حدث خطأ أثناء قراءة بيانات الطالب: "
-                f"{exception}"
+                f"تعذر قراءة بيانات الطالب: {exception}"
             ),
         )
 
@@ -264,9 +242,7 @@ def student_details(student_id):
 
 @app.errorhandler(404)
 def page_not_found(error):
-    """
-    صفحة الخطأ عند عدم العثور على الطالب أو الصفحة.
-    """
+    """عرض رسالة مفهومة عند عدم العثور على صفحة أو طالب."""
 
     return render_template(
         "student_details.html",
@@ -281,7 +257,7 @@ def page_not_found(error):
 
 if __name__ == "__main__":
     app.run(
-        debug=True,
         host="127.0.0.1",
         port=5000,
+        debug=True,
     )
