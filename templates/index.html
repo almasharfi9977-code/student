@@ -1,162 +1,198 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الاستعلام عن بيانات الطالب</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الاستعلام عن بيانات الطالب</title>
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Tahoma",sans-serif;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Tahoma, Arial, sans-serif;
+        }
 
-body{
-    background:#f5f5f5;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-}
+        body {
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 24px 0;
+        }
 
-.container{
-    width:90%;
-    max-width:700px;
-    text-align:center;
-}
-.logo{
-    width:140px;
-    height:auto;
-    display:block;
-    margin:0 auto 15px auto;
-}
-}
+        .container {
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+        }
 
-.school-name{
-    color:#8c1d1d;
-    font-size:34px;
-    font-weight:bold;
-    margin-bottom:5px;
-}
+        .logo {
+            width: 140px;
+            height: auto;
+            display: block;
+            margin: 0 auto 15px;
+        }
 
-.school-sub{
-    color:#8c1d1d;
-    font-size:24px;
-    margin-bottom:45px;
-}
+        .school-name {
+            color: #8c1d1d;
+            font-size: 34px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
-.title{
-    color:#8c1d1d;
-    font-size:40px;
-    font-weight:bold;
-    margin-bottom:15px;
-}
+        .school-sub {
+            color: #8c1d1d;
+            font-size: 24px;
+            margin-bottom: 45px;
+        }
 
-.subtitle{
-    color:#666;
-    font-size:20px;
-    margin-bottom:35px;
-}
+        .title {
+            color: #8c1d1d;
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
 
-.form-box{
-    background:#faf7f4;
-    border:1px solid #e3d8d0;
-    border-radius:25px;
-    padding:35px;
-    text-align:right;
-    box-shadow:0 3px 10px rgba(0,0,0,.05);
-}
+        .subtitle {
+            color: #666;
+            font-size: 20px;
+            margin-bottom: 35px;
+        }
 
-.label-top{
-    font-size:22px;
-    text-align:center;
-    margin-bottom:20px;
-}
+        .form-box {
+            background: #faf7f4;
+            border: 1px solid #e3d8d0;
+            border-radius: 25px;
+            padding: 35px;
+            text-align: right;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
 
-.form-group{
-    margin-bottom:25px;
-}
+        .form-group {
+            margin-bottom: 25px;
+        }
 
-label{
-    display:block;
-    font-size:24px;
-    font-weight:bold;
-    margin-bottom:12px;
-    color:#222;
-}
+        label {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #222;
+        }
 
-input{
-    width:100%;
-    padding:18px;
-    border:2px solid #d88f26;
-    border-radius:15px;
-    background:#eaf0fb;
-    font-size:22px;
-    text-align:right;
-}
+        input {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid #d88f26;
+            border-radius: 15px;
+            background: #eaf0fb;
+            font-size: 22px;
+            text-align: right;
+            direction: rtl;
+        }
 
-button{
-    width:100%;
-    padding:18px;
-    border:none;
-    border-radius:15px;
-    background:#ab1720;
-    color:white;
-    font-size:26px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.3s;
-}
+        input:focus {
+            outline: 3px solid rgba(216, 143, 38, 0.25);
+        }
 
-button:hover{
-    background:#8c1118;
-}
-</style>
+        button {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            background: #ab1720;
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #8c1118;
+        }
+
+        @media (max-width: 600px) {
+            .school-name {
+                font-size: 28px;
+            }
+
+            .school-sub {
+                font-size: 20px;
+                margin-bottom: 32px;
+            }
+
+            .title {
+                font-size: 30px;
+            }
+
+            .subtitle {
+                font-size: 17px;
+            }
+
+            .form-box {
+                padding: 24px;
+            }
+
+            label,
+            input {
+                font-size: 19px;
+            }
+
+            button {
+                font-size: 22px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+    <main class="container">
 
-    
-    <!-- الشعار -->
-   <img src="{{ url_for('static', filename='logo.jpg') }}">
-       
+        <!-- تأكد من وجود الصورة داخل مجلد static باسم logo.jpg -->
+        <img
+            class="logo"
+            src="{{ url_for('static', filename='logo.jpg') }}"
+            alt="شعار مدرسة أبو تمام"
+        >
 
+        <!-- اسم المدرسة -->
+        <div class="school-name">مدرسة أبو تمام</div>
+        <div class="school-sub">للتعليم الأساسي (9-12)</div>
 
-       
+        <!-- عنوان الصفحة -->
+        <h1 class="title">الاستعلام عن بيانات الطالب</h1>
 
-    <!-- اسم المدرسة -->
-    <div class="school-name">مدرسة أبو تمام</div>
-    <div class="school-sub">للتعليم الأساسي (9-12)</div>
+        <p class="subtitle">
+            يرجى إدخال اسم الطالب الثلاثي والولاية
+        </p>
 
-    <!-- العنوان -->
-    <div class="title">الاستعلام عن بيانات الطالب</div>
+        <!-- نموذج البحث -->
+        <form class="form-box" method="POST" action="">
 
-    <div class="subtitle">
-        يرجى إدخال اسم الطالب الثلاثي والولاية
-    </div>
+            <div class="form-group">
+                <label for="student_name">اسم الطالب</label>
 
-    <!-- نموذج البحث -->
-    <div class="form-box">
+                <input
+                    id="student_name"
+                    name="student_name"
+                    type="text"
+                    placeholder="أدخل اسم الطالب الثلاثي"
+                    autocomplete="name"
+                    required
+                >
+            </div>
 
-        <div class="label-top">/</div>
+            <button type="submit">
+                بحث
+            </button>
 
-        <div class="form-group">
-            <label>اسم الطالب</label>
-            <input type="text"
-                   placeholder="أحمد بن هلال بن حمد سلطان المجلي">
-        </div>
+        </form>
 
-        <button type="submit">
-            بحث
-        </button>
-
-    </div>
-
-</div>
+    </main>
 
 </body>
 </html>
