@@ -107,7 +107,12 @@ def find_name_column(student_data):
     }
 
     for column_name in student_data.keys():
-        if normalize_text(column_name) in normalized_possible_names:
+        normalized_column = normalize_text(column_name)
+        if (
+            normalized_column in normalized_possible_names
+            or "اسم" in normalized_column
+            and "طالب" in normalized_column
+        ):
             return column_name
 
     # إذا كان العمود الأول هو الاسم ولم تكن له تسمية معروفة
@@ -145,16 +150,16 @@ def exact_name_sequence_match(student_name, search_text):
 
     search_length = len(search_words)
 
-    # مطابقة الكلمات متتالية وبنفس الترتيب
-    for start_index in range(
-        len(student_words) - search_length + 1
-    ):
-        student_sequence = student_words[
-            start_index:start_index + search_length
-        ]
+    # مطابقة الكلمات بنفس الترتيب، مع السماح بوجود كلمات وسيطة
+    # مثل «بن» داخل الاسم الموجود في Excel.
+    search_index = 0
 
-        if student_sequence == search_words:
-            return True
+    for student_word in student_words:
+        if student_word == search_words[search_index]:
+            search_index += 1
+
+            if search_index == search_length:
+                return True
 
     return False
 
