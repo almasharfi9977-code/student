@@ -3,7 +3,6 @@ from pathlib import Path
 from flask import Flask, abort, render_template, request
 from openpyxl import load_workbook
 
-
 app = Flask(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -20,6 +19,7 @@ NAME_COLUMN_NAMES = {
 
 def normalize_text(value):
     """توحيد النص العربي لتسهيل مطابقة الأسماء."""
+
     if value is None:
         return ""
 
@@ -48,6 +48,7 @@ def normalize_text(value):
 
 def read_students():
     """قراءة بيانات الطلاب من ملف excel.xlsx."""
+
     if not EXCEL_FILE.exists():
         raise FileNotFoundError(
             "لم يتم العثور على ملف excel.xlsx. "
@@ -67,8 +68,8 @@ def read_students():
     if not rows:
         return []
 
-    # الصف الأول يحتوي على عناوين الأعمدة
     headers = []
+
     for index, value in enumerate(rows[0], start=1):
         if value is None or str(value).strip() == "":
             headers.append(f"البيان {index}")
@@ -77,8 +78,8 @@ def read_students():
 
     students = []
 
-    # الطلاب يبدأون من الصف الثاني
     for excel_row_number, row in enumerate(rows[1:], start=2):
+
         if not any(
             value is not None and str(value).strip() != ""
             for value in row
@@ -101,88 +102,62 @@ def read_students():
 
 def find_name_column(student_data):
     """العثور على عمود اسم الطالب."""
+
     normalized_possible_names = {
         normalize_text(name)
         for name in NAME_COLUMN_NAMES
     }
 
     for column_name in student_data.keys():
+
         normalized_column = normalize_text(column_name)
+
         if (
             normalized_column in normalized_possible_names
-            or "اسم" in normalized_column
-            and "طالب" in normalized_column
+            or (
+                "اسم" in normalized_column
+                and "طالب" in normalized_column
+            )
         ):
             return column_name
 
-    # إذا كان العمود الأول هو الاسم ولم تكن له تسمية معروفة
     if student_data:
         return next(iter(student_data.keys()))
 
     return None
 
 
-def get_search_words(search_text):
-    """إرجاع كلمات البحث بعد توحيدها."""
-    normalized_search = normalize_text(search_text)
-    return normalized_search.split()
-
-
-def exact_name_sequence_match(student_name, search_text):
-    """
-    مطابقة دقيقة لاسم ثلاثي أو رباعي.
-
-    يقبل فقط:
-    - ثلاثة أسماء، مثل: محمد ناصر المشرفي
-    - أربعة أسماء، مثل: محمد ناصر سالم المشرفي
-
-    ويبحث عن التسلسل بنفس الترتيب داخل الاسم الكامل في Excel.
-    """
-    student_words = normalize_text(student_name).split()
-    search_words = get_search_words(search_text)
-
-    # السماح بثلاث كلمات أو أربع كلمات فقط
-    if len(search_words) not in (3, 4):
-        return False
-
-    if len(student_words) < len(search_words):
-        return False
-
-    search_length = len(search_words)
-
-    # مطابقة الكلمات بنفس الترتيب، مع السماح بوجود كلمات وسيطة
-    # مثل «بن» داخل الاسم الموجود في Excel.
-    search_index = 0
-
-    for student_word in student_words:
-        if student_word == search_words[search_index]:
-            search_index += 1
-
-            if search_index == search_length:
-                return True
-
-    return False
-
-
 def search_students(search_text):
-    """البحث في عمود اسم الطالب بالاسم الثلاثي أو الرباعي فقط."""
-    search_words = get_search_words(search_text)
+    """
+    البحث المرن عن الطالب.
+    يسمح بالأسماء الطويلة وبالأسماء التي تحتوي على (بن).
+    """
 
-    if len(search_words) not in (3, 4):
+    search_text = normalize_text(search_text)
+
+    if len(search_text.split()) < 3:
         return []
 
     matched_students = []
 
     for student in read_students():
+
         student_data = student["data"]
+
         name_column = find_name_column(student_data)
 
         if not name_column:
             continue
 
-        student_name = student_data.get(name_column, "")
+        student_name = normalize_text(
+            student_data.get(name_column, "")
+        )
 
-        if exact_name_sequence_match(student_name, search_text):
+        # جميع كلمات البحث يجب أن تكون موجودة في الاسم
+        if all(
+            word in student_name
+            for word in search_text.split()
+        ):
             matched_students.append(student)
 
     return matched_students
@@ -190,6 +165,7 @@ def search_students(search_text):
 
 def get_student_by_id(student_id):
     """الحصول على طالب حسب رقم صفه في Excel."""
+
     for student in read_students():
         if student["id"] == student_id:
             return student
@@ -199,33 +175,51 @@ def get_student_by_id(student_id):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    """الصفحة الرئيسية والبحث عن الطلاب."""
+    """الصفحة الرئيسية."""
+
     results = []
     searched_name = ""
     error = ""
 
     if request.method == "POST":
-        searched_name = request.form.get("student_name", "").strip()
-        search_words = get_search_words(searched_name)
 
-        if len(search_words) not in (3, 4):
+        searched_name = request.form.get(
+            "student_name",
+            ""
+        ).strip()
+
+        search_words = normalize_text(
+            searched_name
+        ).split()
+
+        if len(search_words) < 3:
             error = (
-                "يرجى كتابة الاسم الثلاثي أو الرباعي فقط، "
-                "مثل: محمد ناصر المشرفي أو محمد ناصر سالم المشرفي."
+                "يرجى كتابة ثلاثة أسماء على الأقل."
             )
+
         else:
             try:
-                results = search_students(searched_name)
+
+                results = search_students(
+                    searched_name
+                )
 
                 if not results:
-                    error = "لم يتم العثور على طالب مطابق للاسم المدخل."
+                    error = (
+                        "لم يتم العثور على طالب مطابق للاسم المدخل."
+                    )
 
             except FileNotFoundError as exception:
                 error = str(exception)
+
             except RuntimeError as exception:
                 error = str(exception)
+
             except Exception as exception:
-                error = f"حدث خطأ أثناء البحث في ملف Excel: {exception}"
+                error = (
+                    f"حدث خطأ أثناء البحث في ملف Excel: "
+                    f"{exception}"
+                )
 
     return render_template(
         "index.html",
@@ -237,17 +231,24 @@ def index():
 
 @app.route("/student/<int:student_id>")
 def student_details(student_id):
-    """عرض جميع تفاصيل الطالب."""
+    """عرض تفاصيل الطالب."""
+
     try:
         student = get_student_by_id(student_id)
+
     except Exception as exception:
         abort(
             404,
-            description=f"تعذر قراءة بيانات الطالب: {exception}",
+            description=(
+                f"تعذر قراءة بيانات الطالب: {exception}"
+            ),
         )
 
     if student is None:
-        abort(404, description="لم يتم العثور على بيانات الطالب.")
+        abort(
+            404,
+            description="لم يتم العثور على بيانات الطالب."
+        )
 
     return render_template(
         "student_details.html",
@@ -257,6 +258,7 @@ def student_details(student_id):
 
 @app.errorhandler(404)
 def page_not_found(error):
+
     return render_template(
         "student_details.html",
         student=None,
