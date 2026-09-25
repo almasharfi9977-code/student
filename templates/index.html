@@ -10,23 +10,20 @@
         body { min-height: 100vh; padding: 30px 15px; background: #f5f5f5; color: #222; }
         .container { width: 100%; max-width: 900px; margin: auto; text-align: center; }
 
-     .logo {
+    .logo {
     display: block;
     width: 200px;
-    height: 200px;
-    object-fit: contain;
+    max-width: 100%;
+    height: auto;
     margin: 0 auto 20px;
     background: transparent;
-    border-radius: 50%;
-    filter: drop-shadow(0 6px 15px rgba(0,0,0,0.15));
-    transition: transform 0.3s ease;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,.15));
+    transition: transform .3s ease;
 }
 
 .logo:hover {
     transform: scale(1.05);
 }
-
-
 
         .school-name {
     margin-bottom: 8px;
